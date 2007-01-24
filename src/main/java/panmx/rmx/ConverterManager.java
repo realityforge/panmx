@@ -92,7 +92,7 @@ class ConverterManager
         }
         else if( type.isEnum() )
         {
-            final @SuppressWarnings(value = {"unchecked"}) Class<? extends Enum> enumType =
+            @SuppressWarnings( value = {"unchecked"} ) final Class<? extends Enum> enumType =
                 (Class<? extends Enum>)type;
             return new EnumConverter( enumType );
         }
