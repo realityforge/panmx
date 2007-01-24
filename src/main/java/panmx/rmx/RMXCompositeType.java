@@ -3,8 +3,8 @@ package panmx.rmx;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
@@ -81,14 +81,12 @@ class RMXCompositeType
 
         int index = 0;
         final Set<Map.Entry<String, DataFieldDescriptor>> entries = m_fields.entrySet();
-        final Iterator<Map.Entry<String, DataFieldDescriptor>> iterator = entries.iterator();
-        while( iterator.hasNext() )
+        for ( final Entry<String, DataFieldDescriptor> entry : entries )
         {
-            final Map.Entry<String, DataFieldDescriptor> entry = iterator.next();
-            items[index] = entry.getKey();
+            items[ index ] = entry.getKey();
             final DataFieldDescriptor descriptor = entry.getValue();
-            m_descriptors[index] = descriptor;
-            types[index] = descriptor.getConverter().getOpenType();
+            m_descriptors[ index ] = descriptor;
+            types[ index ] = descriptor.getConverter().getOpenType();
             index++;
         }
         m_compositeType = new CompositeType( name, name, items, items, types );
