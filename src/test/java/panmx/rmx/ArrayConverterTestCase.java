@@ -36,7 +36,32 @@ public class ArrayConverterTestCase
         assertEquals( "toOpenType(null)", null, converter.toOpenType( null ) );
     }
 
-    public void testConvertingEmptyArray()
+   public void testBasicOperationWithNonString()
+      throws Exception
+   {
+      final ArrayConverter converter =
+         new ArrayConverter( int[].class, 1, SimpleTypeConverter.INTEGER );
+      assertEquals( "getJavaType()", int[].class, converter.getJavaType() );
+      assertEquals( "getOpenType()", new ArrayType( 1, SimpleType.INTEGER ), converter.getOpenType() );
+
+      final int[] openValue = new int[]{42};
+      final Object convertedOpenValue = converter.toJavaType( openValue );
+      assertEquals( "toJavaType(...) type", int[].class, convertedOpenValue.getClass() );
+      assertTrue( "toJavaType(...) type", convertedOpenValue instanceof int[] );
+      assertEquals( "toJavaType(...).length", 1, ((int[])convertedOpenValue ).length );
+      assertEquals( "toJavaType(...)[0]", openValue[ 0 ], ((int[])convertedOpenValue )[ 0 ] );
+
+      final int[] javaValue = new int[]{16};
+      final Object converterJavaValue = converter.toOpenType( javaValue );
+      assertTrue( "toOpenType(...) type", converterJavaValue instanceof Integer[] );
+      assertEquals( "toOpenType(...).length", 1, ((Integer[])converterJavaValue ).length );
+      assertEquals( "toOpenType(...)[0]", javaValue[ 0 ], ((Integer[])converterJavaValue )[ 0 ].intValue() );
+
+      assertEquals( "toJavaType(null)", null, converter.toJavaType( null ) );
+      assertEquals( "toOpenType(null)", null, converter.toOpenType( null ) );
+   }
+
+   public void testConvertingEmptyArray()
         throws Exception
     {
         final ArrayConverter converter =

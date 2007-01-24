@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
-import javax.management.openmbean.SimpleType;
 
 /**
  * Converter to translate non-SimpleType Arrays to OpenType arrays and back again.
@@ -30,7 +29,7 @@ class ArrayConverter
         throws OpenDataException
     {
         m_javaType = javaType;
-        m_openType = new ArrayType( dimensions, SimpleType.STRING );
+        m_openType = new ArrayType( dimensions, componentConverter.getOpenType() );
         m_componentConverter = componentConverter;
 
         final int size = m_openType.getDimension();
@@ -78,76 +77,57 @@ class ArrayConverter
     public Object toOpenType( final Object object )
         throws OpenDataException
     {
-        final int level = m_openType.getDimension() - 1;
-        return toOpenType( object, level );
-    }
-
-    private Object toOpenType( final Object object, final int level )
-        throws OpenDataException
-    {
-        if( null == object )
-        {
-            return null;
-        }
-        else
-        {
-            final Object[] array = (Object[])object;
-            final Object[] newArray =
-                (Object[])Array.newInstance( m_openJavaTypes[level], array.length );
-            if( 0 == level )
-            {
-                for( int i = 0; i < array.length; i++ )
-                {
-                    newArray[i] = m_componentConverter.toOpenType( array[i] );
-                }
-            }
-            else
-            {
-                final int nextLevel = level - 1;
-                for( int i = 0; i < array.length; i++ )
-                {
-                    newArray[i] = toOpenType( array[i], nextLevel );
-                }
-            }
-
-            return newArray;
-        }
+        return convertArray( object, m_openType.getDimension() - 1, m_openJavaTypes, false );
     }
 
     public Object toJavaType( final Object object )
         throws OpenDataException
     {
-        return toJavaType( object, m_openType.getDimension() - 1 );
+       return convertArray( object, m_openType.getDimension() - 1, m_javaTypes, true );
     }
 
-    private Object toJavaType( final Object object, final int level )
-        throws OpenDataException
-    {
-        if( null == object )
-        {
-            return null;
-        }
-        else
-        {
-            final Object[] array = (Object[])object;
-            final Object[] newArray =
-                (Object[])Array.newInstance( (Class)m_javaTypes[level], array.length );
-            if( 0 == level )
-            {
-                for( int i = 0; i < array.length; i++ )
-                {
-                    newArray[i] = m_componentConverter.toJavaType( array[i] );
-                }
-            }
-            else
-            {
-                final int nextLevel = level - 1;
-                for( int i = 0; i < array.length; i++ )
-                {
-                    newArray[i] = toJavaType( array[i], nextLevel );
-                }
-            }
-            return newArray;
-        }
-    }
+   private Object convertArray( final Object object,
+                                final int level,
+                                final Type[] javaTypes,
+                                final boolean toJava )
+      throws OpenDataException
+   {
+      if( null == object )
+      {
+          return null;
+      }
+      else
+      {
+         if( 0 == level )
+          {
+              final int length = Array.getLength( object );
+              final Object newArray =
+                  Array.newInstance( (Class) javaTypes[ level ], length );
+
+              for( int i = 0; i < length; i++ )
+              {
+                 final Object v = Array.get( object, i );
+                 final Object value =
+                     toJava ?
+                     m_componentConverter.toJavaType( v ) :
+                     m_componentConverter.toOpenType( v );
+                  Array.set( newArray, i, value );
+              }
+              return newArray;
+          }
+          else
+          {
+              final Object[] array = (Object[]) object;
+              final Object[] newArray =
+                  (Object[]) Array.newInstance( (Class) javaTypes[ level ], array.length );
+
+              final int nextLevel = level - 1;
+              for( int i = 0; i < array.length; i++ )
+              {
+                  newArray[i] = convertArray( array[i], nextLevel, javaTypes, toJava );
+              }
+              return newArray;
+          }
+      }
+   }
 }
