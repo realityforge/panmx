@@ -192,7 +192,7 @@ class RMXCompositeType
             final Object javaValue = descriptor.getConverter().toJavaType( value );
             try
             {
-                descriptor.getMutator().invoke( object, new Object[]{javaValue} );
+                descriptor.getMutator().invoke( object, javaValue );
             }
             catch( final Exception e )
             {
@@ -222,7 +222,7 @@ class RMXCompositeType
             final Object value;
             try
             {
-                value = descriptor.getAccessor().invoke( object, new Object[0] );
+                value = descriptor.getAccessor().invoke( object );
             }
             catch( final Exception e )
             {
