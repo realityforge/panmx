@@ -40,9 +40,9 @@ class CompositeConverter
         final Method getType;
         try
         {
-            getType = m_javaType.getMethod( GET_TYPE_METHOD_NAME, new Class[0] );
-            m_to = m_javaType.getMethod( TO_METHOD_NAME, new Class[]{m_javaType} );
-            m_from = m_javaType.getMethod( FROM_METHOD_NAME, new Class[]{COMPOSITE_CLASS_TYPE} );
+            getType = m_javaType.getMethod( GET_TYPE_METHOD_NAME );
+            m_to = m_javaType.getMethod( TO_METHOD_NAME, m_javaType );
+            m_from = m_javaType.getMethod( FROM_METHOD_NAME, COMPOSITE_CLASS_TYPE );
 
             validateReturnType( getType, COMPOSITE_TYPE_CLASS_TYPE );
             validateReturnType( m_to, COMPOSITE_CLASS_TYPE );
