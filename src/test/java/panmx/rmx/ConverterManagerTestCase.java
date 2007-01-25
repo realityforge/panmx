@@ -72,7 +72,7 @@ public class ConverterManagerTestCase
         throws Exception
     {
         final Method method =
-            ConverterManagerTestCase.class.getMethod( "myParametizedMethodWithListReturnValue", new Class[0] );
+            ConverterManagerTestCase.class.getMethod( "myParametizedMethodWithListReturnValue" );
         final Type type = method.getGenericReturnType();
 
         final Converter converter = ConverterManager.getConverterFor( type );
@@ -94,7 +94,7 @@ public class ConverterManagerTestCase
         throws Exception
     {
         final Method method =
-            ConverterManagerTestCase.class.getMethod( "myNonParametizedListMethod", new Class[0] );
+            ConverterManagerTestCase.class.getMethod( "myNonParametizedListMethod" );
         final Type type = method.getGenericReturnType();
 
         try
@@ -118,7 +118,7 @@ public class ConverterManagerTestCase
         throws Exception
     {
         final Method method =
-            ConverterManagerTestCase.class.getMethod( "myParametizedMapMethod", new Class[0] );
+            ConverterManagerTestCase.class.getMethod( "myParametizedMapMethod" );
         final Type type = method.getGenericReturnType();
 
         final Converter converter = ConverterManager.getConverterFor( type );
