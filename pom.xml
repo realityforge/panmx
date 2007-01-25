@@ -4,7 +4,7 @@
   <groupId>panmx</groupId>
   <artifactId>panmx</artifactId>
   <packaging>jar</packaging>
-  <version>1.1</version>
+  <version>1.2-dev</version>
 
   <dependencies>
     <dependency>
