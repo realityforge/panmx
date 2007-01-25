@@ -8,6 +8,7 @@ import java.util.WeakHashMap;
 import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
+import panmx.annotations.MxTabularData;
 
 class ConverterManager
 {
@@ -72,7 +73,7 @@ class ConverterManager
         if( type.isArray() )
         {
             int dimension = 0;
-            Class baseType = type;
+            Class<?> baseType = type;
             while( baseType.isArray() )
             {
                 baseType = baseType.getComponentType();
@@ -84,6 +85,11 @@ class ConverterManager
             {
                 final ArrayType openType = new ArrayType( dimension, baseOpenType );
                 return new SimpleTypeConverter( type, openType );
+            }
+            else if( 1 == dimension && null != baseType.getAnnotation( MxTabularData.class ) )
+            {
+               final String[] keys = baseType.getAnnotation( MxTabularData.class ).keys();
+               return new TabularDataConverter( type, converter, keys );
             }
             else
             {

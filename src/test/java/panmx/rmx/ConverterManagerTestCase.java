@@ -11,6 +11,7 @@ import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
 import javax.management.openmbean.TabularType;
 import junit.framework.TestCase;
+import panmx.annotations.MxTabularData;
 
 public class ConverterManagerTestCase
     extends TestCase
@@ -133,4 +134,29 @@ public class ConverterManagerTestCase
         final TabularType tabularType = new TabularType( name, name, compositeType, new String[]{"key"} );
         assertEquals( "converter.getOpenType()", tabularType, converter.getOpenType() );
     }
+
+   @MxTabularData( keys = {"id"})
+   static class Magic
+   {
+      private int id;
+
+      public int getId()
+      {
+         return id;
+      }
+
+      public void setId( final int id )
+      {
+         this.id = id;
+      }
+   }
+
+   public void testGetTabularDataConverter()
+      throws Exception
+   {
+      final Converter converter = ConverterManager.getConverterFor( Magic[].class );
+      assertNotNull( "getConverterFor(Map<String,Integer>)", converter );
+      assertTrue( "converter.class", converter instanceof TabularDataConverter );
+      assertEquals( "converter.getJavaType()", Magic[].class, converter.getJavaType() );
+   }
 }
