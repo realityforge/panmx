@@ -180,7 +180,7 @@ public class ModelMBeanFactory
      *
      * @throws SecurityException if the caller does not have permission to clear cache.
      */
-    public static final synchronized void clearCache()
+    public static synchronized void clearCache()
         throws SecurityException
     {
         final SecurityManager sm = System.getSecurityManager();
@@ -198,7 +198,7 @@ public class ModelMBeanFactory
      * @return the MBeanInfo for specified type.
      * @throws NotCompliantMBeanException if malformed type.
      */
-    public static final ModelMBeanInfo getMBeanInfo( final Class<?> type )
+    public static ModelMBeanInfo getMBeanInfo( final Class<?> type )
         throws NotCompliantMBeanException
     {
         ModelMBeanInfo info = c_infos.get( type );
