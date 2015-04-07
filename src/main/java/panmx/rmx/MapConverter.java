@@ -75,7 +75,7 @@ class MapConverter
             return null;
         }
 
-        final @SuppressWarnings(value = {"unchecked"}) Map<Object, Object> map = 
+        final @SuppressWarnings(value = {"unchecked"}) Map<Object, Object> map =
             (Map<Object, Object>)object;
         final TabularDataSupport support = new TabularDataSupport( m_openType );
         final CompositeType type = m_openType.getRowType();
@@ -117,5 +117,3 @@ class MapConverter
         return map;
     }
 }
-
-

@@ -69,4 +69,3 @@ public class MapConverterTestCase
         assertEquals( "toOpenType().get(anger).value", 50, resultCompositeData.get("value") );
     }
 }
-

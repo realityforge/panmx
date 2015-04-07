@@ -45,4 +45,3 @@ public class ListConverterTestCase
         assertEquals( "toOpenType()[0]", "MrString", ((String[])convertedJavaValue)[0] );
     }
 }
-
